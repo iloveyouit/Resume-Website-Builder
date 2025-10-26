@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://janedeveloper.github.io/sitemap.xml

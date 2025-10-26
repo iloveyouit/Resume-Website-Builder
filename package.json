@@ -1,0 +1,27 @@
+{
+  "name": "resume-website-builder",
+  "version": "1.0.0",
+  "description": "A reusable package for creating professional online resume websites",
+  "main": "index.js",
+  "scripts": {
+    "build": "node scripts/build.js",
+    "dev": "node scripts/dev-server.js",
+    "validate": "node scripts/validate-config.js",
+    "setup": "node scripts/wizard.js",
+    "deploy": "npm run build && echo 'Build complete! Deploy the dist folder to GitHub Pages'"
+  },
+  "keywords": [
+    "resume",
+    "portfolio",
+    "github-pages",
+    "template",
+    "linkedin"
+  ],
+  "author": "Resume Builder Community",
+  "license": "MIT",
+  "dependencies": {
+    "handlebars": "^4.7.8",
+    "chalk": "^4.1.2"
+  },
+  "devDependencies": {}
+}

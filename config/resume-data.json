@@ -1,0 +1,240 @@
+{
+  "personal": {
+    "fullName": "Jane Developer",
+    "title": "Senior Full Stack Developer",
+    "email": "jane.developer@example.com",
+    "phone": "(555) 123-4567",
+    "location": {
+      "primary": "San Francisco, CA",
+      "secondary": ""
+    },
+    "profileImage": "images/profile.jpg",
+    "social": {
+      "linkedin": "https://linkedin.com/in/janedeveloper",
+      "github": "https://github.com/janedeveloper",
+      "twitter": "https://twitter.com/janedev",
+      "website": "https://janedeveloper.com"
+    }
+  },
+  "summary": {
+    "professional": "Experienced Full Stack Developer with 8+ years of expertise in building scalable web applications. Specialized in React, Node.js, and cloud architecture. Led teams of 5-10 developers and delivered projects serving 1M+ users.",
+    "about": "I'm a passionate developer who loves solving complex problems with elegant code. My journey started with a curiosity about how websites work, and evolved into a career building platforms that impact millions of users. When I'm not coding, you'll find me contributing to open source or mentoring junior developers."
+  },
+  "experience": [
+    {
+      "title": "Senior Full Stack Developer",
+      "company": "TechCorp Inc.",
+      "location": "San Francisco, CA",
+      "startDate": "2020-01",
+      "endDate": "Present",
+      "current": true,
+      "achievements": [
+        "Led development of microservices architecture serving 2M+ daily active users",
+        "Reduced page load time by 60% through React optimization and code splitting",
+        "Mentored 8 junior developers and conducted weekly code review sessions",
+        "Implemented CI/CD pipeline reducing deployment time from 2 hours to 15 minutes"
+      ]
+    },
+    {
+      "title": "Full Stack Developer",
+      "company": "StartupXYZ",
+      "location": "San Francisco, CA",
+      "startDate": "2017-06",
+      "endDate": "2019-12",
+      "current": false,
+      "achievements": [
+        "Built REST API handling 10K requests/second using Node.js and MongoDB",
+        "Developed real-time chat feature using WebSockets serving 50K concurrent users",
+        "Reduced infrastructure costs by 40% through AWS optimization",
+        "Implemented comprehensive test suite achieving 85% code coverage"
+      ]
+    },
+    {
+      "title": "Junior Web Developer",
+      "company": "Digital Agency Co.",
+      "location": "Oakland, CA",
+      "startDate": "2016-01",
+      "endDate": "2017-05",
+      "current": false,
+      "achievements": [
+        "Developed 15+ responsive websites for clients using HTML, CSS, JavaScript",
+        "Integrated third-party APIs including Stripe, Mailchimp, and Google Maps",
+        "Improved website accessibility scores from 60 to 95 on Lighthouse audits",
+        "Collaborated with designers to implement pixel-perfect UI components"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "degree": "B.S. Computer Science",
+      "institution": "University of California, Berkeley",
+      "location": "Berkeley, CA",
+      "startDate": "2012",
+      "endDate": "2016",
+      "gpa": "3.7",
+      "honors": "Dean's List, Cum Laude"
+    }
+  ],
+  "skills": {
+    "categories": [
+      {
+        "name": "Frontend",
+        "icon": "fa-code",
+        "items": ["React", "Vue.js", "TypeScript", "HTML5", "CSS3", "Tailwind CSS"]
+      },
+      {
+        "name": "Backend",
+        "icon": "fa-server",
+        "items": ["Node.js", "Python", "PostgreSQL", "MongoDB", "Redis", "GraphQL"]
+      },
+      {
+        "name": "Cloud & DevOps",
+        "icon": "fa-cloud",
+        "items": ["AWS", "Docker", "Kubernetes", "CI/CD", "Jenkins", "GitHub Actions"]
+      },
+      {
+        "name": "Tools & Others",
+        "icon": "fa-wrench",
+        "items": ["Git", "Jest", "Webpack", "Agile", "REST APIs", "Microservices"]
+      }
+    ],
+    "detailed": [
+      {
+        "name": "React",
+        "years": 6,
+        "proficiency": 95
+      },
+      {
+        "name": "Node.js",
+        "years": 7,
+        "proficiency": 90
+      },
+      {
+        "name": "TypeScript",
+        "years": 4,
+        "proficiency": 85
+      },
+      {
+        "name": "AWS",
+        "years": 5,
+        "proficiency": 80
+      },
+      {
+        "name": "PostgreSQL",
+        "years": 6,
+        "proficiency": 85
+      },
+      {
+        "name": "Docker",
+        "years": 4,
+        "proficiency": 80
+      }
+    ]
+  },
+  "certifications": [
+    {
+      "name": "AWS Certified Solutions Architect",
+      "issuer": "Amazon Web Services",
+      "date": "2022-06",
+      "credentialId": "AWS-SAA-123456",
+      "url": "https://aws.amazon.com/verification"
+    },
+    {
+      "name": "React Professional Certification",
+      "issuer": "Meta",
+      "date": "2021-03",
+      "credentialId": "META-REACT-789",
+      "url": ""
+    }
+  ],
+  "projects": [
+    {
+      "title": "E-Commerce Platform",
+      "description": "Built a full-featured e-commerce platform with real-time inventory management, payment processing, and admin dashboard. Implemented advanced search with Elasticsearch and recommendation engine using collaborative filtering.",
+      "technologies": ["React", "Node.js", "PostgreSQL", "Redis", "Stripe", "AWS"],
+      "highlights": [
+        "Processed $2M+ in transactions in first year",
+        "Achieved 99.9% uptime with auto-scaling infrastructure",
+        "Reduced cart abandonment by 25% with optimized checkout flow"
+      ],
+      "url": "https://github.com/janedeveloper/ecommerce-platform"
+    },
+    {
+      "title": "Real-Time Analytics Dashboard",
+      "description": "Developed a real-time analytics dashboard for monitoring application metrics, user behavior, and system health. Features interactive charts, custom alerts, and data export capabilities.",
+      "technologies": ["React", "D3.js", "WebSockets", "MongoDB", "Node.js"],
+      "highlights": [
+        "Displays data with sub-second latency for 100K+ data points",
+        "Reduced debugging time by 50% with comprehensive logging",
+        "Used by 200+ team members across organization"
+      ],
+      "url": "https://github.com/janedeveloper/analytics-dashboard"
+    },
+    {
+      "title": "Open Source UI Component Library",
+      "description": "Created and maintain a popular React component library with 50+ accessible, customizable components. Includes comprehensive documentation and Storybook demos.",
+      "technologies": ["React", "TypeScript", "Storybook", "Jest", "CSS Modules"],
+      "highlights": [
+        "5K+ GitHub stars and 100K+ weekly npm downloads",
+        "98% test coverage with automated visual regression testing",
+        "Active community with 30+ contributors"
+      ],
+      "url": "https://github.com/janedeveloper/react-ui-kit"
+    }
+  ],
+  "articles": [
+    {
+      "title": "Optimizing React Performance at Scale",
+      "excerpt": "Deep dive into React performance optimization techniques including memoization, code splitting, and virtual DOM optimization for large applications.",
+      "date": "2024-09-15",
+      "readTime": 12,
+      "tags": ["React", "Performance", "JavaScript"],
+      "url": "https://janedeveloper.com/blog/react-performance"
+    },
+    {
+      "title": "Building Microservices with Node.js",
+      "excerpt": "Comprehensive guide to designing, building, and deploying microservices using Node.js, Docker, and Kubernetes.",
+      "date": "2024-07-20",
+      "readTime": 15,
+      "tags": ["Node.js", "Microservices", "DevOps"],
+      "url": "https://janedeveloper.com/blog/microservices-nodejs"
+    }
+  ],
+  "testimonials": [
+    {
+      "quote": "Jane is an exceptional developer who consistently delivers high-quality code. Her ability to architect scalable solutions and mentor junior developers makes her invaluable to any team.",
+      "author": "Michael Chen",
+      "position": "Engineering Manager",
+      "company": "TechCorp Inc."
+    },
+    {
+      "quote": "Working with Jane was a game-changer for our startup. She built our entire platform from scratch and helped us scale to thousands of users. Her technical expertise and problem-solving skills are outstanding.",
+      "author": "Sarah Thompson",
+      "position": "CEO",
+      "company": "StartupXYZ"
+    }
+  ],
+  "settings": {
+    "theme": "default",
+    "sectionsEnabled": {
+      "professionalSummary": true,
+      "about": true,
+      "skills": true,
+      "projects": true,
+      "articles": true,
+      "testimonials": true,
+      "certifications": true
+    },
+    "colors": {
+      "primary": "#2563eb",
+      "secondary": "#1e40af",
+      "accent": "#3b82f6"
+    },
+    "seo": {
+      "title": "Jane Developer - Senior Full Stack Developer | React, Node.js, AWS",
+      "description": "Experienced Full Stack Developer specializing in React, Node.js, and cloud architecture. Building scalable web applications serving millions of users.",
+      "keywords": ["full stack developer", "react developer", "node.js", "aws", "javascript", "typescript"],
+      "canonicalUrl": "https://janedeveloper.github.io"
+    }
+  }
+}

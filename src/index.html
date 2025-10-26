@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{settings.seo.title}}</title>
+    <meta name="description" content="{{settings.seo.description}}">
+    <meta name="keywords" content="{{#each settings.seo.keywords}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:title" content="{{settings.seo.title}}">
+    <meta property="og:description" content="{{settings.seo.description}}">
+    <meta property="og:url" content="{{settings.seo.canonicalUrl}}">
+    <meta property="og:type" content="website">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{{settings.seo.canonicalUrl}}">
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <header class="header">
+            <div class="profile-container">
+                <img src="{{personal.profileImage}}" alt="{{personal.fullName}}" class="profile-image">
+                <div class="profile-info">
+                    <h1 class="name">{{personal.fullName}}</h1>
+                    <p class="title">{{personal.title}}</p>
+                    <div class="contact-info">
+                        <a href="mailto:{{personal.email}}" class="contact-link">
+                            <i class="fas fa-envelope"></i> {{personal.email}}
+                        </a>
+                        <a href="tel:{{personal.phone}}" class="contact-link">
+                            <i class="fas fa-phone"></i> {{personal.phone}}
+                        </a>
+                        <span class="contact-link">
+                            <i class="fas fa-map-marker-alt"></i> {{personal.location.primary}}
+                        </span>
+                    </div>
+                    <div class="social-links">
+                        {{#if personal.social.linkedin}}
+                        <a href="{{personal.social.linkedin}}" target="_blank" class="social-link">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        {{/if}}
+                        {{#if personal.social.github}}
+                        <a href="{{personal.social.github}}" target="_blank" class="social-link">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        {{/if}}
+                        {{#if personal.social.twitter}}
+                        <a href="{{personal.social.twitter}}" target="_blank" class="social-link">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        {{/if}}
+                        {{#if personal.social.website}}
+                        <a href="{{personal.social.website}}" target="_blank" class="social-link">
+                            <i class="fas fa-globe"></i>
+                        </a>
+                        {{/if}}
+                    </div>
+                    <div class="cta-buttons">
+                        <button onclick="window.print()" class="btn-primary">
+                            <i class="fas fa-download"></i> Download Resume
+                        </button>
+                        <a href="mailto:{{personal.email}}" class="btn-secondary">
+                            <i class="fas fa-calendar"></i> Get in Touch
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <!-- Professional Summary -->
+            {{#if settings.sectionsEnabled.professionalSummary}}
+            <section class="summary">
+                <h2><i class="fas fa-star"></i> Professional Summary</h2>
+                <p class="summary-text">{{summary.professional}}</p>
+            </section>
+            {{/if}}
+
+            <!-- About Me -->
+            {{#if settings.sectionsEnabled.about}}
+            <section class="about-me">
+                <h2><i class="fas fa-user"></i> About Me</h2>
+                <p class="about-text">{{summary.about}}</p>
+            </section>
+            {{/if}}
+
+            <!-- Skills -->
+            {{#if settings.sectionsEnabled.skills}}
+            <section class="skills">
+                <h2><i class="fas fa-code"></i> Key Skills</h2>
+                <div class="skills-grid">
+                    {{#each skills.categories}}
+                    <div class="skill-category">
+                        <h3><i class="fas {{icon}}"></i> {{name}}</h3>
+                        <div class="skill-items">
+                            {{#each items}}
+                            <span class="skill-badge">{{this}}</span>
+                            {{/each}}
+                        </div>
+                    </div>
+                    {{/each}}
+                </div>
+
+                {{#if skills.detailed}}
+                <div class="skills-detailed">
+                    <h3>Technical Proficiency</h3>
+                    {{#each skills.detailed}}
+                    <div class="skill-bar">
+                        <div class="skill-info">
+                            <span class="skill-name">{{name}}</span>
+                            <span class="skill-years">{{years}} years</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: {{proficiency}}%"></div>
+                        </div>
+                    </div>
+                    {{/each}}
+                </div>
+                {{/if}}
+            </section>
+            {{/if}}
+
+            <!-- Projects -->
+            {{#if settings.sectionsEnabled.projects}}
+            <section class="featured-projects">
+                <h2><i class="fas fa-laptop-code"></i> Featured Projects</h2>
+                <div class="project-grid">
+                    {{#each projects}}
+                    <div class="project-item">
+                        <h3>{{title}}</h3>
+                        <p class="project-description">{{description}}</p>
+                        <div class="tech-stack">
+                            {{#each technologies}}
+                            <span class="stack-badge">{{this}}</span>
+                            {{/each}}
+                        </div>
+                        <ul class="project-highlights">
+                            {{#each highlights}}
+                            <li>{{this}}</li>
+                            {{/each}}
+                        </ul>
+                        {{#if url}}
+                        <a href="{{url}}" target="_blank" class="project-link">
+                            <i class="fab fa-github"></i> View Project
+                        </a>
+                        {{/if}}
+                    </div>
+                    {{/each}}
+                </div>
+            </section>
+            {{/if}}
+
+            <!-- Articles -->
+            {{#if settings.sectionsEnabled.articles}}
+            {{#if articles}}
+            <section class="blog-insights">
+                <h2><i class="fas fa-newspaper"></i> Technical Articles</h2>
+                <div class="blog-grid">
+                    {{#each articles}}
+                    <article class="blog-post">
+                        <h3>{{title}}</h3>
+                        <p class="blog-excerpt">{{excerpt}}</p>
+                        <div class="blog-meta">
+                            <span class="blog-date"><i class="far fa-calendar"></i> {{date}}</span>
+                            <span class="blog-time"><i class="far fa-clock"></i> {{readTime}} min read</span>
+                        </div>
+                        <div class="blog-tags">
+                            {{#each tags}}
+                            <span class="tag">{{this}}</span>
+                            {{/each}}
+                        </div>
+                        <a href="{{url}}" target="_blank" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                    </article>
+                    {{/each}}
+                </div>
+            </section>
+            {{/if}}
+            {{/if}}
+
+            <!-- Experience -->
+            <section class="experience">
+                <h2><i class="fas fa-briefcase"></i> Professional Experience</h2>
+                {{#each experience}}
+                <div class="experience-item">
+                    <div class="experience-header">
+                        <div>
+                            <h3>{{title}}</h3>
+                            <p class="company"><i class="fas fa-building"></i> {{company}} | {{location}}</p>
+                        </div>
+                        <span class="date">{{formatDate startDate}} - {{formatDate endDate}}</span>
+                    </div>
+                    <ul class="achievements">
+                        {{#each achievements}}
+                        <li>{{this}}</li>
+                        {{/each}}
+                    </ul>
+                </div>
+                {{/each}}
+            </section>
+
+            <!-- Education -->
+            <section class="education">
+                <h2><i class="fas fa-graduation-cap"></i> Education</h2>
+                {{#each education}}
+                <div class="education-item">
+                    <div class="education-header">
+                        <div>
+                            <h3>{{degree}}</h3>
+                            <p class="institution"><i class="fas fa-university"></i> {{institution}}, {{location}}</p>
+                            {{#if honors}}
+                            <p class="honors"><i class="fas fa-award"></i> {{honors}}</p>
+                            {{/if}}
+                        </div>
+                        <span class="date">{{startDate}} - {{endDate}}</span>
+                    </div>
+                    {{#if gpa}}
+                    <p class="gpa">GPA: {{gpa}}</p>
+                    {{/if}}
+                </div>
+                {{/each}}
+            </section>
+
+            <!-- Certifications -->
+            {{#if settings.sectionsEnabled.certifications}}
+            {{#if certifications}}
+            <section class="certifications">
+                <h2><i class="fas fa-certificate"></i> Professional Certifications</h2>
+                <div class="cert-grid">
+                    {{#each certifications}}
+                    <div class="cert-item">
+                        <h3>{{name}}</h3>
+                        <p class="cert-issuer">{{issuer}}</p>
+                        <p class="cert-date">Issued: {{date}}</p>
+                        {{#if credentialId}}
+                        <p class="cert-id">Credential ID: {{credentialId}}</p>
+                        {{/if}}
+                        {{#if url}}
+                        <a href="{{url}}" target="_blank" class="cert-verify">
+                            <i class="fas fa-check-circle"></i> Verify
+                        </a>
+                        {{/if}}
+                    </div>
+                    {{/each}}
+                </div>
+            </section>
+            {{/if}}
+            {{/if}}
+
+            <!-- Testimonials -->
+            {{#if settings.sectionsEnabled.testimonials}}
+            {{#if testimonials}}
+            <section class="testimonials">
+                <h2><i class="fas fa-quote-left"></i> Client Testimonials</h2>
+                <div class="testimonial-grid">
+                    {{#each testimonials}}
+                    <div class="testimonial-card">
+                        <p class="testimonial-quote">"{{quote}}"</p>
+                        <div class="testimonial-author">
+                            <p class="author-name">— {{author}}</p>
+                            <p class="author-title">{{position}}, {{company}}</p>
+                        </div>
+                    </div>
+                    {{/each}}
+                </div>
+            </section>
+            {{/if}}
+            {{/if}}
+        </main>
+
+        <!-- Footer -->
+        <footer class="site-footer">
+            <div class="footer-content">
+                <p>&copy; {{currentYear}} {{personal.fullName}}. All rights reserved.</p>
+                <div class="footer-links">
+                    {{#if personal.social.linkedin}}
+                    <a href="{{personal.social.linkedin}}" target="_blank">LinkedIn</a>
+                    {{/if}}
+                    {{#if personal.social.github}}
+                    <a href="{{personal.social.github}}" target="_blank">GitHub</a>
+                    {{/if}}
+                    <a href="mailto:{{personal.email}}">Contact</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="js/main.js"></script>
+</body>
+</html>
