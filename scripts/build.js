@@ -45,8 +45,28 @@ async function build() {
             throw new Error(`Configuration file not found: ${configPath}`);
         }
 
-        const configData = fs.readFileSync(configPath, 'utf-8');
-        const config = JSON.parse(configData);
+        let configData, config;
+        try {
+            configData = fs.readFileSync(configPath, 'utf-8');
+        } catch (error) {
+            throw new Error(`Failed to read configuration file: ${error.message}`);
+        }
+
+        try {
+            config = JSON.parse(configData);
+        } catch (error) {
+            log('✗ Invalid JSON in configuration file:', 'red');
+            if (error instanceof SyntaxError) {
+                log(`  ${error.message}`, 'yellow');
+                log('\n  Common JSON errors:', 'cyan');
+                log('  • Missing comma between items', 'cyan');
+                log('  • Trailing comma at end of object/array', 'cyan');
+                log('  • Missing quotes around keys or string values', 'cyan');
+                log('  • Unclosed brackets or braces', 'cyan');
+                log('\n  Tip: Validate your JSON at https://jsonlint.com\n', 'cyan');
+            }
+            throw error;
+        }
         log('✓ Configuration loaded successfully', 'green');
 
         // Step 2: Load HTML template
@@ -65,16 +85,26 @@ async function build() {
         registerHelpers();
         log('✓ Helpers registered', 'green');
 
-        // Step 4: Add current year to config
+        // Step 4: Validate profile image exists
+        log('🖼️  Validating profile image...', 'blue');
+        validateProfileImage(config);
+        log('✓ Profile image validated', 'green');
+
+        // Step 5: Add current year to config
         config.currentYear = new Date().getFullYear();
 
-        // Step 5: Compile template
+        // Step 5a: Generate custom color styles from config
+        log('🎨 Generating custom color styles...', 'blue');
+        config.customColorStyles = generateColorStyles(config);
+        log('✓ Custom color styles generated', 'green');
+
+        // Step 6: Compile template
         log('⚙️  Compiling template...', 'blue');
         const template = Handlebars.compile(templateSource);
         const html = template(config);
         log('✓ Template compiled successfully', 'green');
 
-        // Step 6: Create dist directory
+        // Step 7: Create dist directory
         log('📁 Creating dist directory...', 'blue');
         const distPath = path.join(__dirname, '../dist');
 
@@ -83,13 +113,13 @@ async function build() {
         }
         log('✓ Dist directory ready', 'green');
 
-        // Step 7: Write HTML output
+        // Step 8: Write HTML output
         log('💾 Writing HTML file...', 'blue');
         const outputPath = path.join(distPath, 'index.html');
         fs.writeFileSync(outputPath, html, 'utf-8');
         log('✓ HTML file written', 'green');
 
-        // Step 8: Copy CSS files
+        // Step 9: Copy CSS files
         log('🎨 Copying CSS files...', 'blue');
         copyDirectory(
             path.join(__dirname, '../src/css'),
@@ -97,7 +127,7 @@ async function build() {
         );
         log('✓ CSS files copied', 'green');
 
-        // Step 9: Copy JavaScript files
+        // Step 10: Copy JavaScript files
         log('⚡ Copying JavaScript files...', 'blue');
         copyDirectory(
             path.join(__dirname, '../src/js'),
@@ -105,7 +135,7 @@ async function build() {
         );
         log('✓ JavaScript files copied', 'green');
 
-        // Step 10: Copy images
+        // Step 11: Copy images
         log('🖼️  Copying images...', 'blue');
         copyDirectory(
             path.join(__dirname, '../src/images'),
@@ -113,15 +143,20 @@ async function build() {
         );
         log('✓ Images copied', 'green');
 
-        // Step 11: Generate sitemap
+        // Step 12: Generate sitemap
         log('🗺️  Generating sitemap...', 'blue');
         generateSitemap(config);
         log('✓ Sitemap generated', 'green');
 
-        // Step 12: Generate robots.txt
+        // Step 13: Generate robots.txt
         log('🤖 Generating robots.txt...', 'blue');
         generateRobotsTxt(config);
         log('✓ Robots.txt generated', 'green');
+
+        // Step 14: Generate CNAME for custom domain
+        log('🌐 Checking for custom domain...', 'blue');
+        generateCNAME(config);
+        log('✓ CNAME configuration complete', 'green');
 
         // Success message
         log('\n════════════════════════════════════════', 'cyan');
@@ -135,8 +170,24 @@ async function build() {
         displayBuildSummary(config, distPath);
 
     } catch (error) {
-        log('\n✗ Build failed:', 'red');
-        console.error(error);
+        log('\n════════════════════════════════════════', 'red');
+        log('   ✗ Build Failed', 'red');
+        log('════════════════════════════════════════\n', 'red');
+
+        if (error.code === 'ENOENT') {
+            log('File not found:', 'red');
+            log(`  ${error.path}\n`, 'yellow');
+        } else if (error instanceof SyntaxError) {
+            // JSON syntax error - already handled above
+            log(`\n${error.message}\n`, 'red');
+        } else if (error.message) {
+            log(`Error: ${error.message}\n`, 'red');
+        } else {
+            log('Unexpected error occurred:\n', 'red');
+            console.error(error);
+        }
+
+        log('Build failed. Please fix the errors and try again.\n', 'yellow');
         process.exit(1);
     }
 }
@@ -145,15 +196,45 @@ async function build() {
  * Register Handlebars helpers
  */
 function registerHelpers() {
-    // Format date helper
+    // Format date helper with support for multiple formats
     Handlebars.registerHelper('formatDate', function(date) {
         if (!date || date === 'Present') return 'Present';
 
         try {
+            // Handle "YYYY" format (just a year)
+            if (/^\d{4}$/.test(date)) {
+                return date;
+            }
+
+            // Handle "YYYY-MM" format
+            if (/^\d{4}-\d{2}$/.test(date)) {
+                const [year, month] = date.split('-');
+                const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                              'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                const monthIndex = parseInt(month, 10) - 1;
+                if (monthIndex >= 0 && monthIndex < 12) {
+                    return `${months[monthIndex]} ${year}`;
+                }
+            }
+
+            // Handle full ISO date format (YYYY-MM-DD)
+            if (/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+                const d = new Date(date + 'T00:00:00');
+                const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                              'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                return `${months[d.getMonth()]} ${d.getFullYear()}`;
+            }
+
+            // Try to parse as a Date object for other formats
             const d = new Date(date);
-            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-                          'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-            return `${months[d.getMonth()]} ${d.getFullYear()}`;
+            if (!isNaN(d.getTime())) {
+                const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                              'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                return `${months[d.getMonth()]} ${d.getFullYear()}`;
+            }
+
+            // If all else fails, return the original date string
+            return date;
         } catch (e) {
             return date;
         }
@@ -189,6 +270,44 @@ function registerHelpers() {
     Handlebars.registerHelper('unless', function(conditional, options) {
         return Handlebars.helpers['if'].call(this, !conditional, options);
     });
+}
+
+/**
+ * Generate custom color styles from config
+ */
+function generateColorStyles(config) {
+    if (!config.settings || !config.settings.colors) {
+        return '';
+    }
+
+    const colors = config.settings.colors;
+    return `
+    <style>
+        :root {
+            --primary-color: ${colors.primary || '#2563eb'};
+            --secondary-color: ${colors.secondary || '#1e40af'};
+            --accent-color: ${colors.accent || '#3b82f6'};
+        }
+    </style>`;
+}
+
+/**
+ * Validate profile image exists
+ */
+function validateProfileImage(config) {
+    if (!config.personal || !config.personal.profileImage) {
+        log('  Warning: No profile image specified in config', 'yellow');
+        return;
+    }
+
+    const imagePath = config.personal.profileImage.replace('images/', '');
+    const fullImagePath = path.join(__dirname, '../src/images', imagePath);
+
+    if (!fs.existsSync(fullImagePath)) {
+        log(`  Warning: Profile image not found: ${fullImagePath}`, 'yellow');
+        log('  The website will build, but the image will be broken.', 'yellow');
+        log('  Add your image to: src/images/${imagePath}', 'cyan');
+    }
 }
 
 /**
@@ -255,6 +374,31 @@ Sitemap: ${canonicalUrl}/sitemap.xml`;
 
     const distPath = path.join(__dirname, '../dist');
     fs.writeFileSync(path.join(distPath, 'robots.txt'), robots, 'utf-8');
+}
+
+/**
+ * Generate CNAME file for custom domain
+ */
+function generateCNAME(config) {
+    const distPath = path.join(__dirname, '../dist');
+    const cnamePath = path.join(distPath, 'CNAME');
+
+    // Check if custom domain is configured
+    if (config.settings && config.settings.customDomain) {
+        const domain = config.settings.customDomain.trim();
+
+        if (domain) {
+            fs.writeFileSync(cnamePath, domain, 'utf-8');
+            log(`  Custom domain configured: ${domain}`, 'cyan');
+            return;
+        }
+    }
+
+    // Remove CNAME if it exists but no custom domain is set
+    if (fs.existsSync(cnamePath)) {
+        fs.unlinkSync(cnamePath);
+        log('  No custom domain configured', 'yellow');
+    }
 }
 
 /**
